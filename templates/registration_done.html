@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block stylesheets %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL}}css/forms.css" />{% endblock %}
+{% block title %}{% trans "New VPS" %}{% endblock %}
+{% block body %}
+<h1>{% trans "New VPS" %}</h1>
+<p>{% blocktrans %}Your registration has been completed. The staff will enable your account as soon as your payment is received (€{{ price }} with {{ hash }} as UTag, CONSERVE THIS CODE FOR PAYMENT!). You will be notified by email. See <a href="/about/payments/">this page</a> for payments.{% endblocktrans %}
+{% endblock %}

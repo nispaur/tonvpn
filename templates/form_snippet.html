@@ -1,0 +1,11 @@
+<fieldset class="module aligned">
+{% for field in form %}
+    <div class="form-row">
+        {% if not hide_errors %}{{ field.errors }}{% endif %}
+        <div>
+        {{ field.label_tag }} {{ field }} 
+	{{ field.help_text }}
+        </div>
+    </div>
+{% endfor %}
+</fieldset>

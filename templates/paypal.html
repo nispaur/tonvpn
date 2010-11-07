@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block stylesheets %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL}}css/forms.css" />{% endblock %}
+{% block title %}{% trans "Renew a VPS" %}{% endblock %}
+{% block body %}
+<h1>{% trans "Renew a VPS" %}</h1>
+<p>
+{% if sending %}
+{% blocktrans %}To continue the PayPal transaction, please follow this link : <a href="{{ paypal_url }}">paypal</a>. {% endblocktrans %}
+{% endif %}
+{% if cancelled %}
+{% trans "The PayPal transaction has been cancelled." %}
+{% endif %}
+{% if done %}
+<a href="{% url panel.views.index %}">{% trans "Transaction is done !" %}</a>
+{% endif %}
+</p>
+{% endblock %}

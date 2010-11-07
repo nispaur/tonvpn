@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load babel %}
+{% block title %}{% trans "Support" %} - {% trans "Administration" %}{% endblock %}
+{% block body %}
+<h1>{% trans "Support" %} - {% trans "Administration" %}</h1>
+<p>{% trans "Here are the latest unanswered support tickets." %}</p>
+<p>{% if show_read %}
+    <a href="?">{% trans "Hide read tickets" %}</a>
+{% else %}
+    <a href="?show-read=1">{% trans "Show read tickets" %}</a>
+{% endif %}
+</p>
+<table width="100%" border="0" cellpadding="4" cellspacing="0">
+    <thead>
+        <tr>
+            <th width="50%">{% trans "Subject" %}</th>
+            <th width="20%">{% trans "Created" %}</th>
+            <th width="20%">{% trans "Last message" %}</th>
+            <th width="10%">{% trans "Messages" %}</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for line in object_list %}
+    {% if line.unread or show_read %}
+        <tr class="{% cycle 'row1' 'row2' %}">
+            <td><a href="{% url panel.views.admin_support_view line.id %}">{{ line.subject }}</a>
+            {% if show_read and not line.unread %}
+                <sup class="read">{% trans "READ" %}</sup>
+            {% endif %}
+            </td>
+            <td>{{ line.first_message.posted|datefmt:"short" }}</td>
+            <td>{{ line.last_message.posted|datefmt:"short" }}</td>
+            <td>{{ line.count_messages }} ({{ line.count_responses }} {% trans "from admin" %})</td>
+        </tr>
+    {% endif %}
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

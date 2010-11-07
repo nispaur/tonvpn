@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load babel %}
+{% block stylesheets %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL}}css/dashboard.css" />{% endblock %}
+{% block title %}{% trans "Orders list" %}{% endblock %}
+{% block body %}
+<h1>{% trans "Orders list" %}</h1>
+<table width="100%" border="0" cellpadding="4" cellspacing="0">
+    <thead>
+        <tr>
+            <th width="15%">{% trans "Client" %}</th>
+            <th width="25%">{% trans "Network" %}</th>
+            <th width="25%">{% trans "Logistics" %}</th>
+            <th width="25%">{% trans "Payment" %}</th>
+            <th width="10%">{% trans "Actions" %}</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for order in order_queue %}
+        <tr class="in_queue {% cycle 'row1' 'row2' %}">
+            <td><ul class="descr">
+            <li>{{ order.user.get_full_name }}</li>
+            <li>{{ order.user.email }}</li>
+            </ul></td>
+            <td><ul class="descr">
+                {% ifequal order.content_type.name "virtual machine" %}
+                <li>{{ order.vm.ip }} &rsaquo;
+                <img src="{{ MEDIA_URL }}img/door.png" alt="" /> {{ order.object.gateway }}
+                </li>
+                <li><img src="{{ MEDIA_URL }}img/link.png" alt="" /> {{ order.object.domain }}</li>
+                {% endifequal %}
+                {% ifequal order.content_type.name "connection" %}
+                <li><img src="{{ MEDIA_URL }}img/server.png" alt="" /> {{ order.object.server.host }}</li>
+                {% endifequal %}
+            </ul></td>
+            <td><ul class="descr">
+                {% ifequal order.content_type.name "virtual machine" %}
+                <li><img src="{{ MEDIA_URL }}img/server.png" alt="" /> {{ order.object.supervisor.hostname }}</li>
+                <li>{% trans "OS:" %} {{ order.object.os.name }}</li>
+                <li>{% trans "Parts:" %} {{ order.object.parts }}</li>
+                <li>{% trans "Type:" %} {% if order.object.is_active %}{% trans "renewal" %}{% else %}{% trans "new" %}{% endif %}
+                {% endifequal %}
+            </ul></td>
+            <td><ul class="descr">
+	    <li>Via {{ order.get_payment_method_display }}</li>
+		<li>{% blocktrans count order.reservation_time as months %}For {{ months }} month{% plural %}For {{ months }} months{% endblocktrans %}
+                </li>
+                <li>{% trans "Price:" %} €{{ order.price|floatformat:2 }}</li>
+                <li>{% trans "Hash:" %} {{ order.hash }}</li>
+                
+            </ul></td>
+            <td>
+                <form method="post" action="{% url panel.views.admin_order_queue %}">
+                    <p><input type="hidden" name="order_id" value="{{ order.id }}"/>
+                    <input type="submit" value="{% trans "Paid" %}" /></p>
+                </form>
+            </td>
+        </tr>
+    {% empty %}
+        <tr><td colspan="5" align="center">{% trans "No pending orders" %}</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

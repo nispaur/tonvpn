@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block stylesheets %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL}}css/dashboard.css" />{% endblock %}
+{% block title %}{% trans "Control" %}{% endblock %}
+{% block body %}
+<h1>{% trans "Control your virtual machine" %}</h1>
+{% if errors %}
+<p>{% trans "Sorry, your virtual machine state is unavailable" %} :</p>
+{% for error in errors %}
+{{ error }}<br/>
+{% endfor %}
+{% else %}
+{% for vm in vms %}
+<div class="dashbox">
+    <div class="module">
+        <h2>{% trans "Status" %} - {{ vm.domain }}</h2>
+        <dl>
+            <dt>{% trans "State" %}</dt>
+            <dd><div class="bullet bullet{{ vm.state_bullet }}">{{ vm.state }}</div></dd>
+            <dt style="clear: left;">{% trans "Number of virtual CPUs" %}</dt>
+            <dd>{{ vm.cpu }}</dd>
+            <dt>{% trans "CPU time" %}</dt>
+            <dd>{{ vm.cpu_time }} {% trans "seconds" %}</dd>
+        </dl>
+    </div>
+</div>
+<div class="dashbox">
+    <div class="module">
+        <h2>{% trans "Power control" %}</h2>
+    {% ifnotequal vm.state_bullet 1 %}
+        <p><a href="/vps/control/{{ vm.id }}/reboot/">{% trans "Reboot" %}</a></p>
+        <p><a href="/vps/control/{{ vm.id}}/hard_reboot/">{% trans "Hard reboot" %}</a></p>
+    {% endifnotequal %}
+    </div>
+</div>
+{% endfor %}
+{% endif %}
+{% endblock %}

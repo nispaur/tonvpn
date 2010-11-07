@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load babel %}
+{% block stylesheets %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL}}css/dashboard.css" />{% endblock %}
+{% block title %}{% trans "Orders list" %}{% endblock %}
+{% block body %}
+<h1>{% trans "Machines who expire soon or expired" %}</h1>
+<h2>{% trans "Machines who expire soon" %}</h2>
+<table width="100%" border="0" cellpadding="4" cellspacing="0">
+    <thead>
+        <tr>
+            <th width="30%">{% trans "Client" %}</th>
+            <th width="35%">{% trans "Network" %}</th>
+            <th width="35%">{% trans "Logistics" %}</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for vm in vm_expire_soon %}
+        <tr class="in_queue {% cycle 'row1' 'row2' %}">
+            <td><ul class="descr">
+            <li>{{ vm.user.get_full_name }}</li>
+            <li><a href="mailto:{{vm.user.email}}">{{ vm.user.email }}</a></li>
+            </ul></td>
+            <td><ul class="descr">
+                <li>{{ vm.ip }} &rsaquo;
+                <img src="{{ MEDIA_URL }}img/door.png" alt="" /> {{ vm.gateway }}
+                </li>
+                <li><img src="{{ MEDIA_URL }}img/link.png" alt="" /> {{ vm.domain }}</li>
+            </ul></td>
+            <td><ul class="descr">
+                <li><img src="{{ MEDIA_URL }}img/server.png" alt="" /> {{ vm.supervisor.hostname }}</li>
+                <li>{% trans "OS:" %} {{ vm.os.name }}</li>
+                <li>{% trans "Parts:" %} {{ vm.parts }}</li>
+                <li>{% trans "Expiration date:" %} {{ vm.expiration|datefmt:"long" }}</li>
+            </ul></td>
+        </tr>
+    {% empty %}
+        <tr><td colspan="5" align="center">{% trans "No machines who expire soon." %}</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+<h2>{% trans "Machines paused" %}</h2>
+<table width="100%" border="0" cellpadding="4" cellspacing="0">
+    <thead>
+        <tr>
+            <th width="30%">{% trans "Client" %}</th>
+            <th width="35%">{% trans "Network" %}</th>
+            <th width="35%">{% trans "Logistics" %}</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for vm in vm_paused %}
+        <tr class="in_queue {% cycle 'row1' 'row2' %}">
+            <td><ul class="descr">
+            <li>{{ vm.user.get_full_name }}</li>
+            <li><a href="mailto:{{vm.user.email}}">{{ vm.user.email }}</a></li>
+            </ul></td>
+            <td><ul class="descr">
+                <li>{{ vm.ip }} &rsaquo;
+                <img src="{{ MEDIA_URL }}img/door.png" alt="" /> {{ vm.gateway }}
+                </li>
+                <li><img src="{{ MEDIA_URL }}img/link.png" alt="" /> {{ vm.domain }}</li>
+            </ul></td>
+            <td><ul class="descr">
+                <li><img src="{{ MEDIA_URL }}img/server.png" alt="" /> {{ vm.supervisor.hostname }}</li>
+                <li>{% trans "OS:" %} {{ vm.os.name }}</li>
+                <li>{% trans "Parts:" %} {{ vm.parts }}</li>
+                <li>{% trans "Expiration date:" %} {{ vm.expiration|datefmt:"long" }}</li>
+            </ul></td>
+        </tr>
+    {% empty %}
+        <tr><td colspan="5" align="center">{% trans "No machines paused." %}</td></tr>
+    {% endfor %}
+</tbody>
+</table>
+<h2>{% trans "Machines expired" %}</h2>
+<table width="100%" border="0" cellpadding="4" cellspacing="0">
+    <thead>
+        <tr>
+            <th width="30%">{% trans "Client" %}</th>
+            <th width="35%">{% trans "Network" %}</th>
+            <th width="35%">{% trans "Logistics" %}</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for vm in vm_expired %}
+        <tr class="in_queue {% cycle 'row1' 'row2' %}">
+            <td><ul class="descr">
+            <li>{{ vm.user.get_full_name }}</li>
+            <li><a href="mailto:{{vm.user.email}}">{{ vm.user.email }}</a></li>
+            </ul></td>
+            <td><ul class="descr">
+                <li>{{ vm.ip }} &rsaquo;
+                <img src="{{ MEDIA_URL }}img/door.png" alt="" /> {{ vm.gateway }}
+                </li>
+                <li><img src="{{ MEDIA_URL }}img/link.png" alt="" /> {{ vm.domain }}</li>
+            </ul></td>
+            <td><ul class="descr">
+                <li><img src="{{ MEDIA_URL }}img/server.png" alt="" /> {{ vm.supervisor.hostname }}</li>
+                <li>{% trans "OS:" %} {{ vm.os.name }}</li>
+                <li>{% trans "Parts:" %} {{ vm.parts }}</li>
+                <li>{% trans "Expiration date:" %} {{ vm.expiration|datefmt:"long" }}</li>
+            </ul></td>
+        </tr>
+    {% empty %}
+    <tr><td colspan="5" align="center">{% trans "No machines expired." %}</td></tr>
+    {% endfor %}
+</tbody>
+</table>
+{% endblock %}

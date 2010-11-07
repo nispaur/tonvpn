@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load babel %}
+{% block stylesheets %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL}}css/dashboard.css" />{% endblock %}
+{% block title %}{% trans "Administration" %}{% endblock %}
+{% block body %}
+<h1>{% trans "Summary" %} - {% trans "Administration" %}</h1>
+<p><a href="/django-admin/">{% trans "Other admin" %}</a></p>
+<div class="dashbox">
+    <div class="module">
+        <h2>{% trans "Clients" %}</h2>
+        <p>{{ total_clients }} {% trans "clients" %}.</p>
+        <p><a href="{% url panel.views.admin_client_list %}">{% trans "Browse clients" %}</a></p>
+    </div>
+</div>
+<div class="dashbox">
+    <div class="module">
+        <h2>{% trans "VM" %}</h2>
+        <p>{{ pending_vm }} {% trans "orders pending." %}</p>
+        <p><a href="{% url panel.views.admin_order_queue %}">{% trans "Browse orders" %}</a></p>
+        <p><a href="{% url panel.views.admin_expired_vm_list %}">{% trans "Machines who expire soon or expired" %}</a></p>
+    </div>
+</div>
+<div class="dashbox">
+    <div class="module">
+        <h2>{% trans "Support tickets" %}</h2>
+        <p>{% blocktrans count unread_messages as counter %}{{ counter }} unread ticket pending{% plural %}{{ counter }} unread tickets pending{% endblocktrans %}.</p>
+        <p><a href="{% url panel.views.admin_support %}">{% trans "Browse tickets" %}</p>
+        <p><a href="{% url panel.views.admin_support_read "all" %}">{% trans "Mark all tickets as read" %}</a></p>
+    </div>
+</div>
+<div class="dashbox">
+    <div class="module">
+        <h2>{% trans "Ticket templates" %}</h2>
+        <p><a href="/django-admin/panel/tickettemplate/">{% trans "Browse templates" %}</p>
+        <p><a href="/django-admin/panel/tickettemplate/add/">{% trans "Add new template" %}</a></p>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load extratags %}
+{% block title %}{% trans "About" %} {% trans "payments" %}{% endblock %}
+{% block body %}
+<h1>{% trans "About" %} {% trans "payments" %}</h1>
+{% helpicon "utag" as help_utag %}
+{% blocktrans with PNAME as pname and help_utag|safe as help_utag %}<p>{{ pname }} supports various payment methods. You are free to
+use any of them for each order you have to pay.</p>
+<p>This page explains how to use those methods with {{ pname }}. Indeed, you need to follow these
+inscructions in order to fulfill the payment, otherwise we may not be able to treat your request.</p>
+<dl>
+    <dt>When using Paypal</dt>
+    <dd><p>Just click on the link after operation; it will redirect you to the secure Paypal
+    payment website. Follow the the inscructions on Paypal to finish. 
+    </p></dd>
+    <dt>When using bank check</dt>
+    <dd><p>Please mail your check payable to “Mr Sofiane Tardami” to the following adress:</p>
+        <pre>{{ adress }}</pre>
+    <p>Don't forget to write the UTag {{ help_utag }} on the reverse side of your check.</p>
+    </dd>
+    <dt>When using bank transfer</dt>
+    <dd><p>Send your payment to the following IBAN: <tt>{{ iban }}</tt></p>
+    <p>Put the UTag {{ help_utag }} in the transfer commentary line.</p></dd>
+</dl>
+<p>
+{% endblocktrans %}
+    {% comment %}<dt>When using Allopass</dt>
+    <dd>You have to pay 10 times the duration of your order in months (1 Allopass equals €1, so you have to generate as many codes as needed).</dd>{% endcomment %}
+{% endblock %}

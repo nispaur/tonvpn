@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block stylesheets %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL}}css/forms.css" />{% endblock %}
+{% block title %}{% trans "Password reset" %}{% endblock %}
+{% block body %}
+{% if validlink %}
+<h1>{% trans 'Enter new password' %}</h1>
+<p>{% trans "Please enter your new password twice so we can verify you typed it in correctly." %}</p>
+<form action="" method="post">
+{% include "form_snippet.html" %}
+<input type="submit" value="{% trans 'Change my password' %}" />
+</form>
+{% else %}
+<h1>{% trans 'Password reset unsuccessful' %}</h1>
+<p>{% trans "The password reset link was invalid, possibly because it has already been used.  Please request a new password reset." %}</p>
+{% endif %}
+{% endblock %}

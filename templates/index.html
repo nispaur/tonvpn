@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load babel %}
+{% block stylesheets %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL}}css/dashboard.css" />{% endblock %}
+{% block title %}{% trans "Home" %}{% endblock %}
+{% block body %}
+<h1>{% trans "Summary" %}</h1>
+<div class="dashbox">
+    <div class="module">
+        <h2>{% trans "Profile" %}</h2>
+        <dl>
+            <dt>{% trans "Name" %}</dt>
+            <dd>{{ user.get_full_name }}</dd>
+            <dt>{% trans "Client ID" %}</dt>
+            <dd>{{ user.id }}</dd>
+            <dt>{% trans "Last log-in" %}</dt>
+            <dd>{{ user.last_login|datefmt:"long" }}</dd>
+        </dl>
+    </div>
+</div>
+<div class="dashbox">
+    <div class="module">
+        <h2>{% trans "Products which expire soon" %}</h2>
+        <a href="{% url panel.views.renew %}">{% trans "Credit a product !" %}</a>
+        {% for object in objects %}
+        <dl>
+            <dt>{{ object.name }}{{ object.domain }}</dt>
+            <dd>{% trans "Expires the" %} {{ object.get_object.expiration|datefmt:"long" }} &rsaquo; <a href="{% url panel.views.renew %}">{% trans "renew now!" %}</a> </dd>
+        </dl>
+        {% empty %}
+            <p>{% trans "Smile! There is none!" %}</p>
+        {% endfor %}
+    </div>
+</div>
+{% comment %}
+<div class="dashbox">
+    <div class="module">
+        <h2>{% trans "Account" %}</h2>
+        <dl>
+            <dt>{% trans "Creation" %}</dt>
+            <dd>{{ user.get_profile.creation|datefmt:"long" }}</dd>
+            <dt>{% trans "Expiration" %}</dt>
+            <dd>{{ user.get_profile.expiration|datefmt:"long" }}</dd>
+        </dl>
+        <p><a href="/support/add/2">{% trans "Credit my account" %}</a></p>
+    </div>
+</div>
+{% endcomment %}
+{% endblock %}

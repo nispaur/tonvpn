@@ -1,0 +1,12 @@
+/* DASHBOARD */
+
+.dashbox {
+    float: left;
+    width: 20em;
+    margin: 8px;
+}
+
+.dashbox .module h2 {
+    background: #eee url(../img/admin/nav-bg.gif) bottom left repeat-x;
+    color: #666;
+}

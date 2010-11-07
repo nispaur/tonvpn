@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block stylesheets %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL}}css/forms.css" />{% endblock %}
+{% block title %}{% trans "Password reset" %}{% endblock %}
+{% block body %}
+<h1>{% trans "Password reset" %}</h1>
+<p>{% trans "Forgotten your password? Enter your e-mail address below, and we'll e-mail instructions for setting a new one." %}</p>
+<form action="" method="post">
+{% include "form_snippet.html" %}
+<input type="submit" value="{% trans 'Reset my password' %}" />
+</form>
+{% endblock %}

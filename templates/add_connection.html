@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block stylesheets %}
+<script type="text/javascript" src="/admin/jsi18n/"></script>
+<script type="text/javascript" src="/admin-media/js/core.js"></script>
+{{ form.media }}
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL}}css/forms.css" />{% endblock %}
+{% block title %}{% trans "New VPN connection" %}{% endblock %}
+
+{% block body %}
+<h1>{% trans "New VPN connection" %}</h1>
+{% if done %}
+    <p>{% blocktrans %}Your demand has been completed. The staff will enable your VPN as soon as your payment is received (€{{ price }} with {{ hash }} as UTag, CONSERVE THIS CODE FOR PAYMENT!). You will be notified by email. See <a href="/about/payments/">this page</a> for payments.{% endblocktrans %}
+{% else %}
+{% if error %}
+    <p>{% trans "Sorry, we're out of VPN, please try again later." %}
+{% else %}
+    {% if form.errors %}
+        <p></p>
+    {% endif %}
+    <form method="post" action="{% if registration %}{% url panel.views.registration_vpn %}{% else %}{% url vpn.views.add_vpn %}{% endif %}">
+            {% include "form_snippet.html" %}
+            <input type="submit" value="{% trans "Submit" %}" />
+        </form>
+    {% endif %}
+{% endif %}
+{% endblock %}

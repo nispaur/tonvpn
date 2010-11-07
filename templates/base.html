@@ -1,0 +1,70 @@
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{ LANGUAGE_CODE }}" lang="{{ LANGUAGE_CODE }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
+    <head>
+        <title>Tonbnc VPS & VPN Manager - {% block title %}/dev/null{% endblock %}</title>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/base.css" title="Basic stylesheet" />
+        {% block stylesheets %}{% endblock %}
+        <!--[if lte IE 7]><link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/ie.css" /><![endif]-->
+        <!--<link rel="shortch icon" type="image/x-icon" href="/media/img/favicon.ico" />-->
+        {% block head %}{% endblock %}
+    </head>
+    <body>
+        <div id="container">
+            <div id="header">
+                <div id="branding"><h1>Tonbnc VPS & VPN Manager</h1>
+                </div>
+                {% if user.is_authenticated %}
+                <div id="user-tools">
+                    {% trans 'Welcome,' %}
+                    <strong>{% firstof user.first_name user.username %}</strong>.
+                    {% block userlinks %}
+                        <a href="{% url panel.views.account %}">{% trans 'My account' %}</a> /
+                        <a href="{% url django.contrib.auth.views.logout_then_login %}">{% trans 'Log out' %}</a>
+                    {% endblock %}
+                </div>
+                {% endif %}
+            </div>
+            <div id="breadcrumbs">
+                <div id="langs">
+                    <ul>
+                    {% for lang in LANGUAGES %}
+                        <li><a href="/lng/{{ lang.0 }}" title="{{ lang.1 }}"><img src="{{ MEDIA_URL }}img/flags/{{ lang.0 }}.png" alt="{{ lang.1 }}" /></a></li>
+                    {% endfor %}
+                    </ul>
+                </div>
+                <a href="/">{% trans "Home" %}</a>
+                {% if user.is_authenticated %}&sdot;
+                <a href="/vps/control/">{% trans "Control" %}</a> &sdot;
+                <a href="/support/">{% trans "Support" %}</a>&sdot;
+                <a href="/vpn/new/">{% trans "VPN" %}</a>
+                {% if user.is_staff %}
+                &sdot; <a href="/admin/">{% trans "Administration" %}</a>
+                {% endif %}
+                {% else %}
+                 <a href="/register/">{% trans "Register" %}</a>
+                {% endif %}
+            </div>
+            <div id="content">
+            {% if debug %}
+                <div id="debug-alert">
+            <p>{% trans "Warning ! You're browsing a development release." %}</p>
+            </div>
+            {% endif %}
+            {% if messages %}
+            <ul class="messagelist">
+                {% for message in messages %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% block body %}{% endblock %}
+            </div>
+            <div id="footer">
+            </div>
+        </div>
+        {% block javascript %}{% endblock %}
+    </body>
+</html>

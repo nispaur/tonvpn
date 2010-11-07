@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load extratags %}
+{% block title %}{% trans "About" %} {% trans "UTag" %}{% endblock %}
+{% block body %}
+<h1>{% trans "About" %} {% trans "UTag" %}</h1>
+{% blocktrans with PNAME as pname %}<p><acronym title="UniqueTag">UTag</acronym> is a short keyword
+meaning <em>UniqueTag</em>. This tag allows a simple way of communicating between
+{{ pname }} users and administrators when working with orders and payments.</p>
+<p>Indeed, an UTag is generated for each payments we request, so that you can
+write this tag on your bank checks or bank transfert comments. Administrators
+will be able to recognize whose payment it is thanks to this tag.</p>
+<p>So, every time you need to make a non-automated payment, please ensure you
+<strong>join the corresponding UTag</strong> so {{ pname }} staff can validate your request.</p>{% endblocktrans %}
+{% endblock %}

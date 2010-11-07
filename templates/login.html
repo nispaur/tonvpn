@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block stylesheets %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL}}css/forms.css" />{% endblock %}
+{% block title %}{% trans "Identification" %}{% endblock %}
+{% block body %}
+<h1>{% trans "Identification" %}</h1>
+{% if form.errors %}
+<p>{% trans "Your username and password didn't match. Please try again" %}</p>
+{% endif %}
+<form method="post" action="{% url panel.views.login %}">
+{% include "form_snippet.html" %}
+<input type="submit" value="{% trans "Log in" %}" />
+<a href="{% url django.contrib.auth.views.password_reset %}">{% trans "Password reset" %}</a>
+<input type="hidden" name="next" value="{{ next }}" />
+</form>
+{% endblock %}

@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block stylesheets %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL}}css/forms.css" />{% endblock %}
+{% block title %}{% trans "Renew a VPS" %}{% endblock %}
+{% block body %}
+<h1>{% trans "Renew a VPS" %}</h1>
+<p>{% blocktrans %}Your renewal has been completed. The staff will update your account as soon as your payment is received (€{{ price }} with {{ hash }} as Utag, CONSERVE THIS CODE FOR PAYMENT!). See <a href="/about/payments/">this page for payments.</a>{% endblocktrans %}
+{% endblock %}

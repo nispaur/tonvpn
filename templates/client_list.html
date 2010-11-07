@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load babel %}
+{% block stylesheets %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL}}css/dashboard.css" />{% endblock %}
+{% block javascript %}<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    $('.more_handle div.handle').click(function() {
+        $(this).parent().find('div.contents.hid').toggle();
+        $(this).toggleClass('open').css('height', $(this).parent().css('height'));
+    }).each(function() { $(this).css('height', $(this).parent().css('height')) });
+});
+</script>
+{% endblock %}
+{% block title %}{% trans "Clients list" %}{% endblock %}
+{% block body %}
+<h1>{% trans "Clients list" %}</h1>
+{% include "paginate.html" %}
+<table width="100%" border="0" cellpadding="4" cellspacing="0">
+    <thead>
+        <tr>
+            <th width="1%">{% trans "Active" %}</th>
+            <th width="25%">{% trans "Details" %}</th>
+            <th width="30%">{% trans "Stats" %}</th>
+            <th width="30%">{% trans "Payment" %}</th>
+            <th width="14%">{% trans "Actions" %}</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for client in client_list %}
+        <tr class="{% cycle 'row1' 'row2' %}">
+            <td>
+                <img src="{{ MEDIA_URL }}img/admin/icon-{% if client.is_active %}yes{% else %}no{% endif %}.gif" alt="" />
+            </td>
+            <td>
+            {% if client.is_staff %}
+            <div style="float: right; width: 16px; height: 16px; background: url('{{ MEDIA_URL }}img/star.png') no-repeat;" title="{% trans "Staff member" %}"></div>
+            {% endif %}
+            <ul class="descr">
+                <li><strong>{{ client.username|upper }}</strong></li>
+                <li><strong>{{ client.get_full_name }}</strong></li>
+                <li class="more_handle">
+                    <div class="handle"></div>
+                    <div class="contents hid">{{ client.get_profile.address|linebreaks }}</div>
+                    <div class="contents">{{ client.get_profile.city|title }}, {{ client.get_profile.country|title }}</div>
+                </li>
+                <li><a href="mailto:{{client.email}}">{{ client.email }}</a></li>
+            </ul>
+            </td>
+            <td>
+            <ul class="descr">
+                <li>{% trans "Registered on" %} {{ client.date_joined|datetimefmt }}</li>
+                <li>{% trans "Last login on" %} {{ client.last_login|datetimefmt }}</li>
+                <li></li>
+                <li class="more_handle">
+                    <div class="handle"></div>
+                {% if client.get_profile.vms|length %}
+                    <div class="contents"><strong>{% blocktrans with client.get_profile.vms|length as vms and client.get_profile.parts as parts %}Got {{ vms }} machines for a total of {{ parts }} parts.{% endblocktrans %}</strong></div>
+                    <div class="contents hid" style="margin-left: 40px;">
+                        <ul>
+                        {% for vm in client.get_profile.vms %}
+                            <li>{{ vm }}</li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                {% else %}
+                    {% trans "No machines." %}
+                {% endif %}
+                </li>
+            </ul>
+            </td>
+            <td>
+            <ul class="descr">
+                <li class="more_handle">
+                    <div class="handle"></div>
+                {% if client.get_profile.orders|length %}
+                    <div class="contents"><strong>{% blocktrans with client.get_profile.orders|length as payments and client.get_profile.orders_total|default:0 as total %}{{ payments }} payments made for a total of €{{ total }}.{% endblocktrans %}</strong></div>
+                    <div class="contents hid" style="margin-left: 40px;">
+                        <ul>
+                        {% for order in client.get_profile.orders %}
+                            <li>{{ order }}</li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                {% else %}
+                    {% trans "No payments." %}
+                {% endif %} 
+                </li>
+            </ul>
+            </td>
+            <td>
+            {% if client.is_active %}
+                <form method="post" action="{% url panel.views.admin_client_list %}">
+                    <p class="tight"><input type="hidden" name="client_id" value="{{ client.id }}"/>
+                    <input type="hidden" name="action" value="desactivate"/>
+                    <input type="submit" value="{% trans "Desactivate" %}" /></p>
+                </form>
+            {% else %}
+                <form method="post" action="{% url panel.views.admin_client_list %}">
+                    <p class="tight"><input type="hidden" name="client_id" value="{{ client.id }}"/>
+                    <input type="hidden" name="action" value="activate"/>
+                    <input type="submit" value="{% trans "Activate" %}" /></p>
+                </form>
+            {% endif %}
+            </td>
+        </tr>
+    {% empty %}
+        <tr><td colspan="5" align="center">{% trans "No client" %}</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

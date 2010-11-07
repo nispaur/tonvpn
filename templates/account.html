@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block stylesheets %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL}}css/forms.css" />{% endblock %}
+{% block title %}{% trans "My account" %}{% endblock %}
+{% block body %}
+<h1>{% trans "My account" %}</h1>
+<form method="post" action="">
+    {% include "form_snippet.html" %}
+    {% with form_profile as form %}
+        {% include "form_snippet.html" %}
+    {% endwith %}    
+    <input type="submit" value="{% trans "Save changes" %}" />
+    <a href="{% url django.contrib.auth.views.password_change %}">{% trans "Change password" %}</a>
+</form>
+{% endblock %}

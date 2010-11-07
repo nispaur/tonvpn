@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load babel %}
+{% load extratags %}
+{% block stylesheets %}
+<script type="text/javascript" src="/admin/jsi18n/"></script>
+<script type="text/javascript" src="/admin-media/js/core.js"></script>
+{{ form.media }}
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL}}css/forms.css" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL}}css/dashboard.css" />
+{% endblock %}
+{% block title %}{% trans "Renew a VPS" %}{% endblock %}
+{% block body %}
+<h1>{% trans "Renew a VPS" %}</h1>
+<h2>{% trans "Orders pending validation" %}</h2>
+<table>
+    <thead>
+        <tr>
+            <td>{% trans "Machine" %}</td>
+            <td>{% trans "Date" %}</td>
+            <td>{% trans "Payment method" %}</td>
+                {% helpicon "utag" as help_utag %}
+            <td>{% trans "UTag" %} {{ help_utag|safe }}</td>
+            <td>{% trans "Price" %}</td>
+            <td>{% trans "Reservation duration" %}</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.vm.domain }}</td>
+            <td>{{ order.date_order|datefmt:"long" }}</td>
+            <td>{{ order.get_payment_method_display }}</td>
+            <td>{{ order.hash }}</td>
+            <td>{{ order.price }}</td>
+            <td>{{ order.reservation_time }} {% trans "month(s)" %}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% if form.errors %}
+<p></p>
+{% endif %}
+<form method="post" action="{% url panel.views.renew %}">
+{% include "form_snippet.html" %}
+<input type="submit" value="{% trans "Submit" %}" />
+</form>
+{% endblock %}

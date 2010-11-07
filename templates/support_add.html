@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load babel %}
+{% block stylesheets %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL}}css/forms.css" />{% endblock %}
+{% block title %}{% trans "New ticket" %}{% endblock %}
+{% block body %}
+<h1>{% trans "New ticket" %}</h1>
+{% if not ready %}
+<p>{% trans "Please select a request template below, or choose other if your request is not in the list." %}</p>
+<form method="post" action="">
+    {% include "form_snippet.html" %}
+    <input type="submit" value="{% trans "Next step" %}" />
+</form>
+{% else %}
+<form method="post" action="">
+    {% include "form_snippet.html" %}
+    <input type="submit" value="{% trans "Open new ticket" %}" />
+</form>
+{% endif %}
+{% endblock %}

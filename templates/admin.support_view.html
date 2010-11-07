@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load babel %}
+{% block stylesheets %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL}}css/forms.css" />{% endblock %}
+{% block title %}{% trans "View ticket" %} - {% trans "Administration" %}{% endblock %}
+{% block body %}
+<h1>{% trans "View ticket" %} - {% trans "Administration" %}</h1>
+<h3>{% trans "Subject:" %} {{ ticket.subject }}</h3>
+<ol id="board">
+{% for line in ticket.get_messages %}
+    <li class="{% if line.from_admin %}admin{% endif %}">
+        <p>{{ line.content|linebreaks }}</p>
+        <p align="right"><i>{{ line.get_author }} – {{ line.posted|datetimefmt }}</i></p>
+    </li>
+{% endfor %}
+
+<h2>{% trans "Answer" %}</h2>
+<h3>{% trans "Client information" %}</h3>
+<dl>
+    <dt>{% trans "Client ID" %}, {% trans "Name" %}, {% trans "Last log-in" %}</dt>
+    <dd>{{ theuser.id }}, {{ theuser.get_full_name }}, {{ theuser.last_login|datefmt:"short" }}</dd>
+</dl> 
+<form method="post" action="">
+    {% include "form_snippet.html" %}
+    <input type="submit" value="{% trans "Answser" %}" />
+    or <a href="/admin/support/read/{{ ticket.id }}">{% trans "Mark as read" %}</a>
+</form>
+{% endblock %}
